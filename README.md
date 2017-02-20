@@ -20,20 +20,44 @@ https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_templat
 
 
 Camera calibration:
+[Code for this section is present in `cam_calibrate(loc)` function in IPython notebook]
+
 Distortion causes changes in objects appearance (size, shape and relative distance). The first step in analyzing camera images, is to undo this distortion so that we can get correct and useful information out of them. 
-To correct distortion we will take pictures of known shapes (usually it will be a chessboard - because it has regular high contrast patterns) from the camera we are using and then correct distortion errors.
-Here, we will use provided camera images (folder: ) of a chessboard and use cv2 functions to correct distortions
-Take multiple images and compare with chessboard on a flat surface
-Map distorted points to undistorted points
 
-Read in chessboard images with corners 9x6
-Map coordinates of corners of 2D image points to real 3D object points
-Detect corners using findChessboardCorners (which retruns corners found in a gray scale image)
-Append corners retruned in previous step to image points array
-cv2.calibrateCamera to calibrate camera
-ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
+To correct distortion we will take pictures of known shapes (usually it will be a chessboard - because it has regular high contrast patterns) from the camera we are using and compare with chessboard on a flat surface.
 
-Use distortion coefficients and camera matrix returned from previous step along with cv2.undistort to return an undistorted image
+Here, we will use provided camera images of a chessboard and use cv2 functions to correct distortions.
+
+
+#### Steps for camera calibration and image undistortion: 
+
+1. Take multiple images of a chessboard on a flat surface [Chessboard images are present in /camera_cal folder].
+
+2. Read in chessboard images with corners 9x6.
+
+3. Map coordinates of corners of 2D image points to real 3D object points.
+
+4. Detect corners using `cv2.findChessboardCorners` - which retruns corners found in a gray scale image.
+
+![Alt text](/Output-images/Chessboardcorners.png?)
+
+5. Append corners returned in previous step to image points array.
+
+6. Use `cv2.calibrateCamera` to calibrate camera.
+
+`ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)`
+  
+7. Use distortion coefficients and camera matrix returned from previous step along with `cv2.undistort` to return an undistorted image.
+
+8. Use these distortion coefficients and camera matrix to undistort every frame of video in the pipeline; see below for sample:
+
+![Alt text](/Output-images/distored.png?)
+
+![Alt text](/Output-images/undistored.png?)
+
+
+
+
 
 Summary : 
 Lane curvature
