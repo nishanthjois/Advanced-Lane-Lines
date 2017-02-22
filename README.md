@@ -106,7 +106,7 @@ Create a binary threshold to select pixels based on gradient strength:
   
     sxbinary[(scaled_sobel >= thresh_min) & (scaled_sobel <= thresh_max)] = 1
   
-    plt.imshow(sxbinary, cmap='gray')`
+    plt.imshow(sxbinary, cmap='gray')
 
 ![Alt text](/Output-images/sobelx.png?)
 
@@ -117,7 +117,7 @@ Now we will explore the direction, or orientation, of the gradient.
 
 The direction of the gradient is simply the arctangent of the y-gradient divided by the x-gradient. Each pixel of the resulting image contains a value for the angle of the gradient away from horizontal in units of radians, covering a range of −π/2 to π/2. An orientation of 0 implies a horizontal line and orientations of +/−π/2 imply vertical lines.
 
-   `
+   
     sobelx=cv2.Sobel(gray,cv2.CV_64F,1,0,ksize=sobel_kernel)
    
     sobely=cv2.Sobel(gray,cv2.CV_64F,0,1,ksize=sobel_kernel)
@@ -130,7 +130,7 @@ The direction of the gradient is simply the arctangent of the y-gradient divided
     
     binary_output=np.zeros_like(orient)
     
-    binary_output[(orient>=thresh[0])&(orient<=thresh[1])]=1`
+    binary_output[(orient>=thresh[0])&(orient<=thresh[1])]=1
     
 
 ![Alt text](/Output-images/direction_gradient.png?)
@@ -142,7 +142,7 @@ We will use HSV color space to get valuable information about our lane lines. Hu
 
 As per our experiments (and class tutorials) 'S' channel does a robust job of picking up the lines under very different color and contrast conditions. Under good conditions lane lines appear darker using H channel. Lets combine these 2 with a threshold to detect a better lane line.
 
-   `
+   
     hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS).astype(np.float)
     hue = hls[:, :, 0]
     lightness = hls[:, :, 1]
@@ -156,7 +156,7 @@ As per our experiments (and class tutorials) 'S' channel does a robust job of pi
     # Threshold h channel
     hue_threshold=(20, 100)
     h_binary = np.zeros_like(hue)
-    h_binary[(hue >= hue_threshold[0]) & (hue <= hue_threshold[1])] = 1`
+    h_binary[(hue >= hue_threshold[0]) & (hue <= hue_threshold[1])] = 1
 
 ![Alt text](/Output-images/huechannel.png?)
 
@@ -167,14 +167,14 @@ As per our experiments (and class tutorials) 'S' channel does a robust job of pi
 
 Previous transformations were all in gray scale due to this we lose valuable information about colors. It's important that we reliably detect different colors of lane lines under varying degrees of daylight and shadow. Lane lines are typically in yellow and white colors so let's combine various color thresholds to make the most robust identification of the lines.
 
-   `
+   
     yellow_lane= cv2.inRange(img, (200,200,0), (255,255,150))
    
     white_lane= cv2.inRange(img, (200, 200, 200), (255, 255, 255))
     
     yellow_and_white_img = yellow_lane | white_lane
     
-    yellow_and_white_img = np.divide(yellow_and_white_img, 255)`
+    yellow_and_white_img = np.divide(yellow_and_white_img, 255)
     
 
 ![Alt text](/Output-images/yellow_white.png?)
@@ -197,8 +197,8 @@ After applying calibration, thresholding, and a perspective transform to a road 
 
 We first take a histogram along all the columns in the lower half of the image like this:
     
-    `
-      histogram = np.sum(binary_warped[binary_warped.shape[0]/2:,:], axis=0)`
+    
+      histogram = np.sum(binary_warped[binary_warped.shape[0]/2:,:], axis=0)
 
 ![Alt text](/Output-images/histogram.png?)
 
@@ -206,7 +206,7 @@ Step #2:
 
 In thresholded binary image, pixels are either 0 or 1, so the two most prominent peaks in this histogram will be good indicators of the x-position of the base of the lane lines. 
    
-    `
+    
      # Find the peak of the left and right halves of the histogram.
     These will be the starting point for the left and right lines
   
@@ -223,7 +223,7 @@ We can use above mentioned x-position as a starting point for where to search fo
 
 Now we find lane line pixels, use their x and y pixel positions to fit a second order polynomial curve:
 
-  ` 
+   
     # Step through the windows one by one
     for window in range(nwindows):
        # Identify window boundaries in x and y (and right and left)
@@ -265,7 +265,7 @@ Now we find lane line pixels, use their x and y pixel positions to fit a second 
     # Fit a second order polynomial to each
     left_fit = np.polyfit(lefty, leftx, 2)
     right_fit = np.polyfit(righty, rightx, 2)
-    `
+    
 
 ![Alt text](/Output-images/lanelines.png?)
 
@@ -292,36 +292,36 @@ We have a thresholded image, where we've estimated which pixels belong to the le
 
 Our equation for radius of curvature becomes:
 
-  `
+  
     left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
   
-    right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])`
+    right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
 
 So we actually need to repeat this calculation after converting our x and y values to real world space.
 
 This involves measuring how long and wide the section of lane is that we're projecting in our warped image. For this project, we are assuming that the lane is about 30 meters long and 3.7 meters wide. 
 
-  ` 
+  
     # define conversion in x and y from pixel space to meters
     y_eval = 719
     
     ym_per_pix = 30/720
     
-    xm_per_pix = 3.7/(l-r)`
+    xm_per_pix = 3.7/(l-r)
     
 
 ### 10. Finding your offset from lane center
 
 We can assume the camera is mounted at the center of the car, such that the lane center is the midpoint at the bottom of the image between the two lines you've detected. The offset of the lane center from the center of the image (converted from pixels to meters) is your distance from the center of the lane.
 
-  `
+  
     Calculate lane positions 
   
     mid_lane = (np.max(fit_rightx) - np.min(fit_leftx))
     
     left = np.min(fit_leftx)
     
-    right = np.max(fit_rightx)`
+    right = np.max(fit_rightx)
 
 
 ### 11. Pipepline
@@ -336,7 +336,7 @@ Once we have a good measurement of the line positions in warped space, it's time
 
 We have a warped binary image called warped, and we have fit the lines with a polynomial and have arrays called ploty, left_fitx and right_fitx, which represent the x and y pixel values of the lines. We can then project those lines onto the original image as follows:
 
-    `
+    
     # Create an image to draw the lines on
     
     warp_zero = np.zeros_like(warped).astype(np.uint8)
@@ -363,7 +363,7 @@ We have a warped binary image called warped, and we have fit the lines with a po
     
     result = cv2.addWeighted(undist, 1, newwarp, 0.3, 0)
     
-    plt.imshow(result)`
+    plt.imshow(result)
 
 ![Alt text](/Output-images/detectedlanemerged.png?)
 
@@ -371,7 +371,7 @@ We have a warped binary image called warped, and we have fit the lines with a po
 
 Instead of calibrating our input frame every time, we calibrate and store the camera calibration file and load whenever required.
 
-    `
+    
     #If camera has not been calibrated
     
     if not os.path.isfile(calibrated_file):
@@ -388,20 +388,20 @@ Instead of calibrating our input frame every time, we calibrate and store the ca
        
        cam_matrix = data['cam_matrix']
        
-       dist_coeff = data['dist_coeff']`
+       dist_coeff = data['dist_coeff']
        
 
 ### 14. Read and save output
 These 2 lines are declared in our main function (which also contains a call to pipeline()) to read test file and write the video to result
 
-    `
+    
     # Read input file
     
     input_file = VideoFileClip('./project_video.mp4')
     
     # Store input file
     
-    result.write_videofile(output_file , audio=False)`
+    result.write_videofile(output_file , audio=False)
 
 ![Alt text](/Output-images/outputframe.png?)
 
