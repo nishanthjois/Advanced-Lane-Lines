@@ -60,10 +60,10 @@ For this project, we take a frame of the road and transform it to bird’s-eye v
 
 We will match 4 image points (src) on the road to desired image points (dst) on the perspective transformed image. Source and image points are described here:
 
-   `
+   
     src = np.array([[490, 482],[810, 482], [1250, 720],[40, 720]], dtype=np.float32)
    
-    dst = np.array([[0, 0], [1280, 0], [1250, 720],[40, 720]], dtype=np.float32)`
+    dst = np.array([[0, 0], [1280, 0], [1250, 720],[40, 720]], dtype=np.float32)
 
 Note: I have chosen source points manually but I would like to explore in future a method which calculates these automatically.
   
@@ -191,7 +191,7 @@ At this point, it's okay to detect edges around trees or cars because these line
 #### 8. Detect lane lines using histogram and sliding window:
 [Code for this section is present in `detect_first_lane(binary_warped)` function in IPython notebook]
 
-Step #1: 
+##### Step #1: 
 
 After applying calibration, thresholding, and a perspective transform to a road image, we should have a binary image where the lane lines stand out clearly. However, we still need to decide explicitly which pixels are part of the lines and which belong to the left line and which belong to the right line.
 
@@ -202,7 +202,7 @@ We first take a histogram along all the columns in the lower half of the image l
 
 ![Alt text](/Output-images/histogram.png?)
 
-Step #2: 
+##### Step #2: 
 
 In thresholded binary image, pixels are either 0 or 1, so the two most prominent peaks in this histogram will be good indicators of the x-position of the base of the lane lines. 
    
@@ -215,9 +215,9 @@ In thresholded binary image, pixels are either 0 or 1, so the two most prominent
     leftx_base = np.argmax(histogram[:midpoint])
     
     rightx_base = np.argmax(histogram[midpoint:]) + midpoint  
-    `
     
-Step #3: 
+    
+##### Step #3: 
 
 We can use above mentioned x-position as a starting point for where to search for the lines. From that point, we can use a sliding window, placed around the line centers, to find and follow the lines up to the top of the frame.
 
@@ -269,7 +269,7 @@ Now we find lane line pixels, use their x and y pixel positions to fit a second 
 
 ![Alt text](/Output-images/lanelines.png?)
 
-Step #4:
+##### Step #4:
 
 [Code for this section is present in `detect_next_lane(binary_warped, left_fit, right_fit)` function in IPython notebook]
 
@@ -277,7 +277,7 @@ We will skip the sliding windows step once we know where the lines, in the next 
 
 ![Alt text](/Output-images/laneplotted.png?)
 
-Step #5: 
+##### Step #5: 
 
 [Code for this section is present in `sanity_check(lane, radius_l, radius_r)` function in IPython notebook]
 
