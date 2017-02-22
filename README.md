@@ -60,9 +60,10 @@ For this project, we take a frame of the road and transform it to bird’s-eye v
 
 We will match 4 image points (src) on the road to desired image points (dst) on the perspective transformed image. Source and image points are described here:
 
-   `src = np.array([[490, 482],[810, 482], [1250, 720],[40, 720]], dtype=np.float32)`
+   `
+    src = np.array([[490, 482],[810, 482], [1250, 720],[40, 720]], dtype=np.float32)
    
-    `dst = np.array([[0, 0], [1280, 0], [1250, 720],[40, 720]], dtype=np.float32)`
+    dst = np.array([[0, 0], [1280, 0], [1250, 720],[40, 720]], dtype=np.float32)`
 
 Note: I have chosen source points manually but I would like to explore in future a method which calculates these automatically.
   
@@ -95,16 +96,17 @@ Calculate the derivative in the x-direction (the 1, 0 at the end denotes x-direc
 Sample code:
 Create a binary threshold to select pixels based on gradient strength:
 
- `
-  thresh_min = 20
+  
+  
+    thresh_min = 20
  
-  thresh_max = 100
+    thresh_max = 100
   
-  sxbinary = np.zeros_like(scaled_sobel)
+    sxbinary = np.zeros_like(scaled_sobel)
   
-  sxbinary[(scaled_sobel >= thresh_min) & (scaled_sobel <= thresh_max)] = 1
+    sxbinary[(scaled_sobel >= thresh_min) & (scaled_sobel <= thresh_max)] = 1
   
-  plt.imshow(sxbinary, cmap='gray')`
+    plt.imshow(sxbinary, cmap='gray')`
 
 ![Alt text](/Output-images/sobelx.png?)
 
