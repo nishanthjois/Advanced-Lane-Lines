@@ -221,9 +221,10 @@ In thresholded binary image, pixels are either 0 or 1, so the two most prominent
 
 We can use above mentioned x-position as a starting point for where to search for the lines. From that point, we can use a sliding window, placed around the line centers, to find and follow the lines up to the top of the frame.
 
-Now we find lane line pixels, use their x and y pixel positions to fit a second order polynomial curve:
+This section we iterate nwindows times and in each iteration we identify window's 4 sides, find good pixels for right and left lanes and append to lane indices for further processing. Now we find lane line pixels, use their x and y pixel positions to fit a second order polynomial curve; we also re-center next window if minimum number of pixels are found :
 
-   
+Note: Polynomial is calculated using `x = ay^2 + by + c`
+
     # Step through the windows one by one
     for window in range(nwindows):
        # Identify window boundaries in x and y (and right and left)
@@ -290,8 +291,10 @@ If sanity check fails we retain the previous positions from the frame prior and 
 
 We have a thresholded image, where we've estimated which pixels belong to the left and right lane lines and we've fit a polynomial to those pixel positions. Next we'll compute the radius of curvature of the fit.
 
+Note: Radius of curavture is calculated using
+`curvature = pow(1 + (2*a*y + b)**2, 1.5) / math.fabs (2*a)`
+ 
 Our equation for radius of curvature becomes:
-
   
     left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
   
@@ -420,8 +423,8 @@ For all the issues I faced, mentor, forums and slack channels came to rescue, th
 
 #### Future work:
 
-1. Make the code work on advanced challenge
+1. Make the code work on advanced challenges
 
-2. Make sure that lane lines don't wobble
+2. Do not hardcode src, dst points for perspective transform
 
-3. Do not hardcode src, dst points for perspective transform
+3. Use low pass filter to smooth lane detection
