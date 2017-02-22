@@ -28,13 +28,11 @@ Here, we will use provided camera images of a chessboard and use cv2 functions t
 
   1. Take multiple images of a chessboard on a flat surface [Chessboard images are present in /camera_cal folder].
 
-    2. Read in chessboard images with corners 9x6.
+  2. Read in chessboard images with corners 9x6.
 
   3. Map coordinates of corners of 2D image points to real 3D object points.
 
   4. Detect corners using `cv2.findChessboardCorners` - which returns corners found in a gray scale image.
-
-![Alt text](/Output-images/Chessboardcorners.png?)
 
   5. Append corners returned in previous step to image points array.
 
@@ -45,6 +43,8 @@ Here, we will use provided camera images of a chessboard and use cv2 functions t
   7. Use distortion coefficients and camera matrix returned from previous step along with `cv2.undistort` to return an undistorted image.
 
   8. Use these distortion coefficients and camera matrix to undistort every frame of video in the pipeline; see below for sample:
+
+![Alt text](/Output-images/Chessboardcorners.png?)
 
 ![Alt text](/Output-images/distored.png?)
 
