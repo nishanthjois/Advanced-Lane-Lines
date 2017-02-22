@@ -38,7 +38,7 @@ Here, we will use provided camera images of a chessboard and use cv2 functions t
 
   6. Use `cv2.calibrateCamera` to calibrate camera.
 
-`ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)`
+    `ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)`
   
   7. Use distortion coefficients and camera matrix returned from previous step along with `cv2.undistort` to return an undistorted image.
 
