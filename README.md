@@ -427,4 +427,4 @@ For all the issues I faced, mentor, forums and slack channels came to rescue, th
 
 2. Do not hardcode src, dst points for perspective transform
 
-3. Use low pass filter to smooth lane detection
+3. Use low pass filter to smoothen lane detection
