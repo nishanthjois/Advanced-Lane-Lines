@@ -1,13 +1,13 @@
 # Advanced-Lane-Lines
 
-Advanced Lane Finding Project: Detect lane lines using Ccomputer vision techniques. 
+Advanced Lane Finding Project: Detect lane lines using computer vision techniques. 
 
-The goals steps of this project are the following:
+The goals of this project are the following:
 
 1. Compute the camera calibration matrix and distortion coefficients given a set of chessboard images.
 2. Apply a distortion correction to raw images.
 3. Use color transforms, gradients, etc., to create a thresholded binary image.
-4. Apply a perspective transform to rectify binary image ("birds-eye view").
+4. Apply a perspective transform to rectify binary image ("bird's-eye view").
 5. Detect lane pixels and fit to find the lane boundary.
 6. Determine the curvature of the lane and vehicle position with respect to center.
 7. Warp the detected lane boundaries back onto the original image.
@@ -126,7 +126,7 @@ The direction of the gradient is simply the arctangent of the y-gradient divided
 
 We will use HSV color space to get valuable information about our lane lines. Hue is the term for the pure spectrum colors commonly referred to by the 'color names'.'Value' represent different ways to measure the relative lightness or darkness of a color. For example, a dark red will have a similar hue but much lower value for lightness than a light red. Saturation also plays a part in this; saturation is a measurement of colorfulness. So, as colors get lighter and closer to white, they have a lower saturation value, whereas colors that are the most intense, like a bright primary color (imagine a bright red, blue, or yellow), have a high saturation value.
 
-As per our experiments (and class tutorials) 'S' channel does a robost job of picking up the lines under very different color and contrast conditions. Under good conditions lane lines appear darker using H channel. Lets combine these 2 with a threshold to detect a better lane line.
+As per our experiments (and class tutorials) 'S' channel does a robust job of picking up the lines under very different color and contrast conditions. Under good conditions lane lines appear darker using H channel. Lets combine these 2 with a threshold to detect a better lane line.
 
     `hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS).astype(np.float)
     hue = hls[:, :, 0]
@@ -150,7 +150,7 @@ As per our experiments (and class tutorials) 'S' channel does a robost job of pi
 #### 6. Yellow and white pixels
 [Code for this section is present in `color_gradient_threshold(img)` function in IPython notebook]
 
-Previous transformations were all in gray scale due to this we loose valuable information about colors. It's important that we reliably detect different colors of lane lines under varying degrees of daylight and shadow. Lane lines are typically in yellow and white colors so lets combine various color thresholds to make the most robust identification of the lines.
+Previous transformations were all in gray scale due to this we lose valuable information about colors. It's important that we reliably detect different colors of lane lines under varying degrees of daylight and shadow. Lane lines are typically in yellow and white colors so let's combine various color thresholds to make the most robust identification of the lines.
 
    `yellow_lane= cv2.inRange(img, (200,200,0), (255,255,150))
     white_lane= cv2.inRange(img, (200, 200, 200), (255, 255, 255))
@@ -285,7 +285,7 @@ We can assume the camera is mounted at the center of the car, such that the lane
 
 
 ### 11. Pipepline
-We will combine all our functions mentioned above and create a pipeline. This pipeline takes one frame at a time and returns wraped image.
+We will combine all our functions mentioned above and create a pipeline. This pipeline takes one frame at a time and returns warped image.
 
 ### 12. Drawing the lines back down onto the road
 [Code for this section is present in `lanes_warped (warped, left_fitx, right_fitx, ploty)` function in IPython notebook]
@@ -314,9 +314,9 @@ We have a warped binary image called warped, and we have fit the lines with a po
 
 ![Alt text](/Output-images/detectedlanemerged.png?)
 
-### 13. Store camera calibarion file
+### 13. Store camera calibration file
 
-Instead of calibarting our input frame everytime, we calibarate and store the camera calibaration file and load whenver required.
+Instead of calibrating our input frame every time, we calibrate and store the camera calibration file and load whenever required.
 
     #If camera has not been calibrated
     if not os.path.isfile(calibrated_file):
@@ -341,14 +341,17 @@ These 2 lines are declared in our main function (which also contains a call to p
 
 
 #### Issues I faced:
-1. Had issue in getting prespective transform.
+1. Had issue in getting perspective transform.
 2. Was not sure how to do sanity check.
 3. Had trouble understanding how plotting and ployfit works (my mentor helped me understand this with diagrams).
 4. There were lot of minute tweaks - which  I had to do to get this working.
 
 For all the issues I faced, mentor, forums and slack channels came to rescue, thanks! 
 
-
+#### Future work:
+1. Make the code work on advanced challenge
+2. Make sure that lane lines don't wobble
+3. Do not hardcode src, dst points for perspective transform
 
 
 
