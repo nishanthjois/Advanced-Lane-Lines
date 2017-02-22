@@ -149,7 +149,7 @@ As per our experiments (and class tutorials) 'S' channel does a robust job of pi
     saturation = hls[:, :, 2]
     
     # Threshold s channel
-    saturation_threshold=(180, 190)
+    saturation_threshold=(170, 255)
     s_binary = np.zeros_like(saturation)
     s_binary[(saturation >= saturation_threshold[0]) & (saturation <= saturation_threshold[1])] = 1
     
