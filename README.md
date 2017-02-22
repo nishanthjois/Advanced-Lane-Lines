@@ -408,6 +408,8 @@ These 2 lines are declared in our main function (which also contains a call to p
 
 ![Alt text](/Output-images/outputframe.png?)
 
+#### Output video:
+
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/nnbsHtPdJFE/0.jpg)](http://www.youtube.com/watch?v=nnbsHtPdJFE "Output video")
 
 #### Issues I faced:
